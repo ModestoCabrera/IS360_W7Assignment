@@ -61,9 +61,17 @@ def parse_site(url):
 
 
 def main():
-    downfile = url_download("https://www.globalpolicy.org/component/content/article/109/27519.html")
-    parse_site(downfile)
-
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-u', '--url', help='Enter URL Link to access HTML Table.')
+    args = parser.parse_args()
+    try:
+        if args.url:
+            fetch_url = url_download(args.url)
+            parse_site(fetch_url)
+            
+    except urllib2.URLError as url_err:
+        print 'Invalid URL'
+        raise url_err
 
 if __name__ == '__main__':
     main()
