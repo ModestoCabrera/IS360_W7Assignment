@@ -32,17 +32,19 @@ def url_download(url):
 def parse_site(url):
     """
     Args:
-        data (dict): dictionary holds index keys, and values of data.
+        year (list): holds values of the year column
+        data (list): holds values of the data cells
         title (list): list holds title of columns of table.
 
     Returns:
-        output (tup): Tuple of title list and data dictionary.
+        output (tup): Tuple of title list, year list, and data list.
 
     Examples:
         >>> parse_site(url)
         >>> 
     """
-    data = {}
+    year = []
+    data = []
     title = []
     try:
         soup_obj = BeautifulSoup(url, 'html.parser')
@@ -50,10 +52,11 @@ def parse_site(url):
         for row in  table.find_all('tr'):
             cell = row.find_all('td')
             if re.search(r"[0-9]", cell[0].text):
-                data[cell[0].text] = [cell[1].text, cell[2].text]
+                year.append(cell[0].text)
+                data.append([cell[1].text, cell[2].text])
             else:
                 title = cell[0].text, cell[1].text, cell[2].text
-        output = (title, data)
+        output = (title, year, data)
         return output
     except ValueError:
         print 'ValueError Please check URL format'
